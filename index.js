@@ -24,39 +24,39 @@ function createEmployeeRecords(array){
     return company   
 }
 
-function createTimeInEvent(record, date){    
+function createTimeInEvent(date){    
     let time = date.split(" ")
-    record.timeInEvents.push({type: "TimeIn", hour: parseInt(time[1]), date: time[0]})
-    return record
+    this.timeInEvents.push({type: "TimeIn", hour: parseInt(time[1]), date: time[0]})
+    return this
 }
 
-function createTimeOutEvent(record, date){
+function createTimeOutEvent(date){
     let time = date.split(" ")
-    record.timeOutEvents.push({type: "TimeOut", hour: parseInt(time[1]), date: time[0]})
-    return record
+    this.timeOutEvents.push({type: "TimeOut", hour: parseInt(time[1]), date: time[0]})
+    return this
 }
 
-function hoursWorkedOnDate(record, date){
-    let inEvent = record.timeInEvents.find(function(e){
+function hoursWorkedOnDate(date){
+    let inEvent = this.timeInEvents.find(function(e){
         return e.date === date
     })
 
-    let outEvent = record.timeOutEvents.find(function(e){
+    let outEvent = this.timeOutEvents.find(function(e){
         return e.date === date
     })
   let time = outEvent.hour - inEvent.hour
   return time / 100
 }
 
-function wagesEarnedOnDate(record, date){
-    let pay = hoursWorkedOnDate(record, date) * record.payPerHour
+function wagesEarnedOnDate(date){
+    let pay = hoursWorkedOnDate.call(this, date) * this.payPerHour
     let v = parseFloat(pay.toString())
     return v
 }
 
 function calculatePayroll(array){
      let total = array.reduce(function(num, employee){
-         return num += allWagesFor(employee)
+         return num += allWagesFor.call(employee)
      }, 0)
     return total
 }
